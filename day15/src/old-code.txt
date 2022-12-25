@@ -1,0 +1,43 @@
+
+fn solve(data: &[usize], steps: usize) {
+    // let mut storage = VecMap::with_capacity(steps);
+    // let mut last = 0;
+    //
+    // for (i, &x) in data.iter().enumerate() {
+    //     if i > 0 {
+    //         storage.insert(last, i - 1);
+    //     }
+    //     last = x as usize;
+    // }
+    //
+    // for i in data.len()..steps {
+    //     // === Using good-old if-let match.
+    //     //   - Note: we perform two identical lookups for `last`.
+    //     let age = if let Some(index) = storage.get(last) {
+    //         i - 1 - index
+    //     } else {
+    //         0
+    //     };
+    //     storage.insert(last, i - 1);
+    //     last = age;
+    //
+    //     // === Using Entry API.
+    //     //   - Note: at first glance, we only perform one lookup for `last`,
+    //     //     but in reality, `e.insert` does the second (identical) lookup internally!
+    //     // match storage.entry(last) {
+    //     //     vec_map::Entry::Vacant(e) => {
+    //     //         e.insert(i - 1);
+    //     //         last = 0;
+    //     //     }
+    //     //     vec_map::Entry::Occupied(mut e) => {
+    //     //         last = i - 1 - e.insert(i - 1);
+    //     //     }
+    //     // }
+    // }
+
+    let last = spoken_number(&data, steps);
+    println!(
+        "Last spoken number for {:?} after {} steps is {}",
+        data, steps, last
+    );
+}

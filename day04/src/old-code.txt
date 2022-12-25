@@ -1,0 +1,165 @@
+impl Passport {
+    fn is_valid_simple(&self) -> bool {
+        self.byr.is_some()
+            && self.iyr.is_some()
+            && self.eyr.is_some()
+            && self.hgt.is_some()
+            && self.hcl.is_some()
+            && self.ecl.is_some()
+            && self.pid.is_some()
+        // Note: self.cid is optional for validation
+    }
+
+    fn is_valid_complex(&self) -> bool {
+        // macro_rules! validate {
+        //     ($field:ident $(,)? $block:expr) => {
+        //         if let Some($field) = &self.$field {
+        //             $block
+        //         } else {
+        //             return false
+        //         }
+        //     };
+        //     ($field:ident, captures $re:literal as $caps:ident $(,)? $block:expr) => {
+        //         validate!($field , {
+        //             if let Some($caps) = regex!($re).captures(&$field) {
+        //                 $block
+        //             } else {
+        //                 return false
+        //             }
+        //         })
+        //     };
+        //     ($field:ident, matches $re:literal $($(,)? $block:expr)?) => {
+        //         validate!($field , {
+        //             if !regex!($re).is_match(&$field) {
+        //                 return false
+        //             }
+        //             $block
+        //         })
+        //     };
+        // }
+        //
+        // validate!(byr, captures r"^(\d{4})$" as caps {
+        //     let n = caps.get(1).unwrap().as_str().parse::<i32>().unwrap();
+        //     if !(1920..=2002).contains(&n) {
+        //         return false;
+        //     }
+        // });
+
+        // byr (Birth Year) - four digits; at least 1920 and at most 2002.
+        if let Some(byr) = &self.byr {
+            if let Some(caps) = regex!(r"^(\d{4})$").captures(&byr) {
+                let n = caps.get(1).unwrap().as_str().parse::<i32>().unwrap();
+                if !(1920..=2002).contains(&n) {
+                    eprintln!("Passport is invalid because `byr` is not inside range!");
+                    return false;
+                }
+            } else {
+                eprintln!("Passport is invalid because `byr` does not match regex!");
+                return false;
+            }
+        } else {
+            eprintln!("Passport is invalid because `byr` is None!");
+            return false;
+        }
+
+        // iyr (Issue Year) - four digits; at least 2010 and at most 2020.
+        if let Some(iyr) = &self.iyr {
+            if let Some(caps) = regex!(r"^(\d{4})$").captures(&iyr) {
+                let n = caps.get(1).unwrap().as_str().parse::<i32>().unwrap();
+                if !(2010..=2020).contains(&n) {
+                    eprintln!("Passport is invalid because `iyr` is not inside range!");
+                    return false;
+                }
+            } else {
+                eprintln!("Passport is invalid because `iyr` does not match regex!");
+                return false;
+            }
+        } else {
+            eprintln!("Passport is invalid because `iyr` is None!");
+            return false;
+        }
+
+        // eyr (Expiration Year) - four digits; at least 2020 and at most 2030.
+        if let Some(eyr) = &self.eyr {
+            if let Some(caps) = regex!(r"^(\d{4})$").captures(&eyr) {
+                let n = caps.get(1).unwrap().as_str().parse::<i32>().unwrap();
+                if !(2020..=2030).contains(&n) {
+                    eprintln!("Passport is invalid because `eyr` is not inside range!");
+                    return false;
+                }
+            } else {
+                eprintln!("Passport is invalid because `eyr` does not match regex!");
+                return false;
+            }
+        } else {
+            eprintln!("Passport is invalid because `eyr` is None!");
+            return false;
+        }
+
+        // hgt (Height) - a number followed by either cm or in:
+        //  If cm, the number must be at least 150 and at most 193.
+        //  If in, the number must be at least 59 and at most 76
+        if let Some(hgt) = &self.hgt {
+            if let Some(caps) = regex!(r"^(\d+)(cm|in)$").captures(&hgt) {
+                let n = caps.get(1).unwrap().as_str().parse::<i32>().unwrap();
+                let unit = caps.get(2).unwrap().as_str();
+                match unit {
+                    "cm" => {
+                        if !(150..=193).contains(&n) {
+                            return false;
+                        }
+                    }
+                    "in" => {
+                        if !(59..=76).contains(&n) {
+                            return false;
+                        }
+                    }
+                    _ => return false,
+                }
+            } else {
+                return false;
+            }
+        } else {
+            eprintln!("Passport is invalid because `hgt` is None!");
+            return false;
+        }
+
+        // hcl (Hair Color) - a # followed by exactly six characters 0-9 or a-f.
+        if let Some(hcl) = &self.hcl {
+            if !regex!(r"^#[0-9a-f]{6}$").is_match(&hcl) {
+                eprintln!("Passport is invalid because `hcl` does not match regex!");
+                return false;
+            }
+        } else {
+            eprintln!("Passport is invalid because `hcl` is None!");
+            return false;
+        }
+
+        // ecl (Eye Color) - exactly one of: amb blu brn gry grn hzl oth.
+        if let Some(ecl) = &self.ecl {
+            if !regex!(r"^(amb|blu|brn|gry|grn|hzl|oth)$").is_match(&ecl) {
+                eprintln!("Passport is invalid because `ecl` does not match regex!");
+                return false;
+            }
+        } else {
+            eprintln!("Passport is invalid because `ecl` is None!");
+            return false;
+        }
+
+        // pid (Passport ID) - a nine-digit number, including leading zeroes
+        if let Some(pid) = &self.pid {
+            if !regex!(r"^(\d{9})$").is_match(&pid) {
+                eprintln!("Passport is invalid because `pid)` does not match regex!");
+                return false;
+            }
+        } else {
+            eprintln!("Passport is invalid because `pid` is None!");
+            return false;
+        }
+
+        // cid (Country ID) - ignored, missing or not.
+
+        // If passed all validation checks, then the Passport is valid
+        true
+    }
+}

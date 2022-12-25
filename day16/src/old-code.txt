@@ -1,0 +1,59 @@
+
+    // println!(
+    //     "Valid tickets ({} of {}, including your ticket):",
+    //     valid_tickets.len(),
+    //     nearby_tickets.len() + 1
+    // );
+    // for ticket in valid_tickets.iter() {
+    //     println!(" - {:?}", ticket);
+    // }
+
+    // // let fields = rules.iter().map(|r| r.field).collect_vec();
+    //
+    // println!("Possible fields for each position:");
+    // for i in 0..my_ticket.numbers.len() {
+    //     let suitable_rules = rules
+    //         .iter()
+    //         .filter(|r| valid_tickets.iter().all(|t| r.contains(&t.numbers[i])))
+    //         .collect_vec();
+    //
+    //     let possible_fields = suitable_rules.iter().map(|r| &r.field).collect_vec();
+    //     println!(" - {}: {:?}", i, possible_fields);
+    // }
+    //
+    // println!("Indices (1-based) of possible fields for each position:");
+    // for i in 0..my_ticket.numbers.len() {
+    //     let suitable_rules = rules
+    //         .iter()
+    //         .enumerate()
+    //         .filter(|(_, r)| valid_tickets.iter().all(|t| r.contains(&t.numbers[i])))
+    //         .collect_vec();
+    //
+    //     let possible_fields = suitable_rules.iter().map(|(i, _)| i + 1).collect_vec();
+    //     println!(" - {}: {:?}", i + 1, possible_fields);
+    // }
+    //
+    // println!("Possible positions for each field:");
+    // let n = my_ticket.numbers.len();
+    // for rule in rules.iter() {
+    //     let possible_positions = (0..n)
+    //         .filter(|&i| valid_tickets.iter().all(|t| rule.contains(&t.numbers[i])))
+    //         .collect_vec();
+    //     println!(" - {}: {:?}", rule.field, possible_positions);
+    // }
+    //
+    // let mut matrix = vec![vec![false; n]; n];
+    // // i = field
+    // // j = position
+    //
+    // for (i, rule) in rules.iter().enumerate() {
+    //     for j in 0..n {
+    //         let is_possible_position = valid_tickets.iter().all(|t| rule.contains(&t.numbers[j]));
+    //         if is_possible_position {
+    //             matrix[i][j] = true;
+    //         }
+    //     }
+    // }
+    //
+    // println!("Matrix:");
+    // print_matrix(&matrix);
