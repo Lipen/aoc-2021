@@ -1,2 +1,6 @@
-target/
-.idea/
+# IDE
+/.idea/
+
+# Build
+/target/
+Cargo.lock
